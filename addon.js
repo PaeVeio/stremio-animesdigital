@@ -51,7 +51,7 @@ const manifest = {
 // Campo de verificação para o stremio-addons.net
   "stremioAddonsConfig": {
     "issuer": "https://stremio-addons.net",
-    "signature": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBMiI6ImJMTI4QjDLUhT"
+    "signature": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..uaOuGqLp-gBYv4iyoC9-Yw.CXJdoRPoPzWe35BK-Q1Z0ix36vV15_bc4OKxHP9DniYvj5RW-HUmlmtfgL2DViELxUagBDp5CC_ksVJAZWpNAIj9LpphkuCjwo5rwtGQWWJofVEc_KuCGbj4x23H52u8.bLc3vIPmWB2wMrJCoRAeRw"
   }
 };
 
