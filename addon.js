@@ -9,7 +9,7 @@ const manifest = {
   id: 'org.animesdigital.stremio.v16',
   version: '2.1.0',
   name: 'AnimesDigital',
-  description: 'Assista animes online em HD diretamente do AnimesDigital.org. Catálogo completo com todos os episódios, lançamentos, legendados e dublados.',
+  description: 'Assista animes online em HD Catálogo completo com todos os episódios, lançamentos, legendados e dublados.',
   // Agora usando a imagem personalizada como LOGO
   logo: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663488503845/zEDQBlPBckDCnshz.webp',
   // Background padrão do site
