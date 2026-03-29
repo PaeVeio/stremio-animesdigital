@@ -49,7 +49,6 @@ const manifest = {
     configurationRequired: false,
   },
 };
-// Configuração para reivindicar autoria no stremio-addons.net
 {
   "stremioAddonsConfig": {
     "issuer": "https://stremio-addons.net",
