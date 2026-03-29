@@ -49,9 +49,9 @@ const manifest = {
     configurationRequired: false,
   },
 // Campo de verificação para o stremio-addons.net
-  stremioAddonsConfig: {
-    issuer: "https://stremio-addons.net",
-    signature: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBMiI6ImJMTI4QjDLUhT"
+  "stremioAddonsConfig": {
+    "issuer": "https://stremio-addons.net",
+    "signature": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBMiI6ImJMTI4QjDLUhT"
   }
 };
 
