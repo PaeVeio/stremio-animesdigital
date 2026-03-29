@@ -173,3 +173,4 @@ Este addon é um projeto não-oficial e independente. Ele não armazena nenhum c
 - [axios](https://axios-http.com/) — Requisições HTTP
 - [cheerio](https://cheerio.js.org/) — Parser HTML/scraping
 - [node-cache](https://github.com/node-cache/node-cache) — Cache em memória
+
