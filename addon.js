@@ -49,7 +49,13 @@ const manifest = {
     configurationRequired: false,
   },
 };
-
+// Configuração para reivindicar autoria no stremio-addons.net
+{
+  "stremioAddonsConfig": {
+    "issuer": "https://stremio-addons.net",
+    "signature": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..N1y7U0Hvzqqk11ddDcExNw.Slm77tFZ2QqgwbxGk-dAWKvbSzXmAeye_HhbcaeTkNCyJHv553ozryUAYVLwlcW7FCEMW_x4a7qGtb0VvsNnf8zB5APRQ6gyzR-QwZN1EfeTxWE4pwp57O6s9HW4WXtF.2mVTYqR4kDCsqR6ANme5TA"
+  }
+}
 const builder = new addonBuilder(manifest);
 
 /**
