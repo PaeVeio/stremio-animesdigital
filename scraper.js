@@ -63,7 +63,7 @@ function detectTotalPages($) {
   $('.content-pagination a').each((i, el) => {
     const href = $(el).attr('href') || '';
     const text = $(el).text().trim();
-    const pageMatch = href.match(/\/page\/(\d+)\//);
+    const pageMatch = href.match(/\/page\/(\d+)\//) || href.match(/pagina=(\d+)/);
     if (pageMatch) {
       const pageNum = parseInt(pageMatch[1], 10);
       if (pageNum > maxPage) maxPage = pageNum;
@@ -128,7 +128,7 @@ async function searchAnimes(query) {
 
       results.push({
         id: `animesdigital:${slug}`,
-        type: 'series',
+        type: 'movie', // Forçamos movie para compatibilidade com a Home
         name: text,
         slug,
         url: href,
@@ -198,7 +198,11 @@ async function getCatalog(page = 1, genre = null) {
 
   try {
     let url;
-    if (genre) {
+    if (genre === 'legendado') {
+      url = `${BASE_URL}/animes-legendados-online?filter_letter=0&type_url=animes&filter_audio=legendado&filter_order=name&filter_genre_add=&filter_genre_del=&pagina=${page}&search=0&limit=30`;
+    } else if (genre === 'dublado') {
+      url = `${BASE_URL}/animes-dublado/?filter_letter=0&type_url=animes&filter_audio=dublado&filter_order=name&filter_genre_add=&filter_genre_del=&pagina=${page}&search=0&limit=30`;
+    } else if (genre) {
       url = page > 1 ? `${BASE_URL}/genero/${encodeURIComponent(genre)}/page/${page}/` : `${BASE_URL}/genero/${encodeURIComponent(genre)}/`;
     } else {
       url = page > 1 ? `${BASE_URL}/page/${page}/?cat=animes` : `${BASE_URL}/?cat=animes`;
@@ -224,7 +228,7 @@ async function getCatalog(page = 1, genre = null) {
 
       results.push({
         id: `animesdigital:${slug}`,
-        type: 'series',
+        type: 'movie', // Forçamos movie para compatibilidade com a Home
         name: text,
         slug,
         url: href,
@@ -274,7 +278,7 @@ async function getRecentAnimes() {
 
       results.push({
         id: `animesdigital:${slug}`,
-        type: 'series',
+        type: 'movie', // Forçamos movie para compatibilidade com a Home
         name: text,
         slug,
         url: href,
@@ -357,7 +361,7 @@ async function getAnimeInfo(slug) {
 
     const info = {
       id: `animesdigital:${slug}`,
-      type: 'series',
+      type: 'movie', // Forçamos movie para compatibilidade com a Home
       name: title,
       slug,
       poster,
@@ -440,3 +444,4 @@ module.exports = {
   getStreams,
   getSpecialCatalog,
 };
+
