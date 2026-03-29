@@ -5,12 +5,15 @@ const scraper = require('./scraper');
 
 // Manifest do addon
 const manifest = {
-  id: 'org.animesdigital.stremio',
-  version: '1.3.0',
+  // Mudança de ID para forçar o Stremio a tratar como um addon NOVO e limpar o cache
+  id: 'org.animesdigital.stremio.v16',
+  version: '2.1.0',
   name: 'AnimesDigital',
-  description: 'Assista animes online em HD diretamente do AnimesDigital.org. Catálogo completo com todos os episódios, lançamentos e últimos episódios.',
-  logo: 'https://animesdigital.org/wp-content/uploads/2021/10/cropped-favicon-animes-digital-192x192.png',
-  background: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663488503845/zEDQBlPBckDCnshz.webp',
+  description: 'Assista animes online em HD diretamente do AnimesDigital.org. Catálogo completo com todos os episódios, lançamentos, legendados e dublados.',
+  // Agora usando a imagem personalizada como LOGO
+  logo: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663488503845/zEDQBlPBckDCnshz.webp',
+  // Background padrão do site
+  background: 'https://animesdigital.org/wp-content/uploads/2021/10/assistir-jujutsu-kaisen-todos-os-episodios-online-animesdigital.jpg',
   resources: ['catalog', 'meta', 'stream'],
   types: ['series', 'movie'],
   idPrefixes: ['animesdigital:', 'animesdigital_video:'],
@@ -22,33 +25,30 @@ const manifest = {
       extra: [{ name: 'search', isRequired: false }],
     },
     {
-      id: 'animesdigital-ultimos',
+      id: 'animesdigital-legendados-home',
       type: 'movie',
-      name: 'Últimos Episódios',
-      extra: [{ name: 'search', isRequired: false }],
-    },
-    {
-      id: 'animesdigital-recentes',
-      type: 'series',
-      name: 'AnimesDigital - Recentes',
+      name: 'Animes Legendados',
       extra: [
         { name: 'search', isRequired: false },
-        { name: 'skip', isRequired: false },
+        { name: 'skip', isRequired: false }
       ],
     },
     {
-      id: 'animesdigital-dublado',
-      type: 'series',
-      name: 'AnimesDigital - Dublado',
-      extra: [{ name: 'skip', isRequired: false }],
-    },
+      id: 'animesdigital-dublados-home',
+      type: 'movie',
+      name: 'Animes Dublados',
+      extra: [
+        { name: 'search', isRequired: false },
+        { name: 'skip', isRequired: false }
+      ],
+    }
   ],
   behaviorHints: {
     adult: false,
     configurable: false,
     configurationRequired: false,
   },
-// Campo de verificação para o stremio-addons.net
+  // Campo de verificação para o stremio-addons.net
   "stremioAddonsConfig": {
     "issuer": "https://stremio-addons.net",
     "signature": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..uaOuGqLp-gBYv4iyoC9-Yw.CXJdoRPoPzWe35BK-Q1Z0ix36vV15_bc4OKxHP9DniYvj5RW-HUmlmtfgL2DViELxUagBDp5CC_ksVJAZWpNAIj9LpphkuCjwo5rwtGQWWJofVEc_KuCGbj4x23H52u8.bLc3vIPmWB2wMrJCoRAeRw"
@@ -62,34 +62,30 @@ const builder = new addonBuilder(manifest);
  */
 builder.defineCatalogHandler(async ({ type, id, extra }) => {
   const skip = parseInt(extra?.skip || 0);
-  const page = Math.floor(skip / 10) + 1;
+  const page = Math.floor(skip / 30) + 1;
 
   try {
     let animes = [];
 
-    // Busca por texto
+    // Busca por texto (Global)
     if (extra?.search) {
       animes = await scraper.searchAnimes(extra.search);
     } else if (id === 'animesdigital-lancamentos') {
       animes = await scraper.getSpecialCatalog('lancamentos');
-    } else if (id === 'animesdigital-ultimos') {
-      animes = await scraper.getSpecialCatalog('ultimos');
-    } else if (id === 'animesdigital-recentes') {
-      animes = await scraper.getRecentAnimes();
-      if (animes.length === 0 || skip > 0) {
-        const catalogPage = await scraper.getCatalog(page);
-        animes = skip > 0 ? catalogPage : [...animes, ...catalogPage];
-      }
-    } else if (id === 'animesdigital-dublado') {
+    } else if (id === 'animesdigital-legendados-home') {
+      animes = await scraper.getCatalog(page, 'legendado');
+    } else if (id === 'animesdigital-dublados-home') {
       animes = await scraper.getCatalog(page, 'dublado');
     } else {
+      // Fallback para o catálogo geral se o ID não bater
       animes = await scraper.getCatalog(page);
     }
 
     // Converter para formato Stremio
     const metas = animes.map(anime => ({
       id: anime.id,
-      type: anime.type || 'series',
+      // O tipo DEVE ser o mesmo do catálogo (movie) para não dar EmptyContent
+      type: 'movie', 
       name: anime.name,
       poster: anime.poster || undefined,
       posterShape: 'poster',
@@ -107,6 +103,7 @@ builder.defineCatalogHandler(async ({ type, id, extra }) => {
  */
 builder.defineMetaHandler(async ({ type, id }) => {
   try {
+    // Caso seja um vídeo direto (dos catálogos de lançamentos/últimos)
     if (id.startsWith('animesdigital_video:')) {
       const videoId = id.split(':')[1];
       return {
@@ -139,7 +136,8 @@ builder.defineMetaHandler(async ({ type, id }) => {
 
     const meta = {
       id,
-      type: 'series',
+      // O tipo deve ser movie para ser compatível com o catálogo da Home
+      type: 'movie', 
       name: info.name,
       poster: info.poster || undefined,
       posterShape: 'poster',
