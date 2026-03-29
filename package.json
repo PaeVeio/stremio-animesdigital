@@ -1,0 +1,21 @@
+{
+  "name": "stremio-animesdigital",
+  "version": "1.0.0",
+  "description": "Addon Stremio para AnimesDigital.org - Assista animes online em HD",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node test.js"
+  },
+  "keywords": ["stremio", "anime", "animesdigital"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.14.0",
+    "cheerio": "^1.2.0",
+    "express": "^5.2.1",
+    "node-cache": "^5.1.2",
+    "stremio-addon-sdk": "^1.6.10"
+  }
+}
